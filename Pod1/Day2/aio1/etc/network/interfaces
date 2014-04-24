@@ -1,0 +1,26 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+auto eth0
+iface eth0 inet static
+	address 10.1.64.151/24
+	gateway 10.1.64.1
+	# dns-* options are implemented by the resolvconf package, if installed
+	dns-nameservers 10.1.64.10
+	dns-search stack.lab
+
+auto eth1
+iface eth1 inet static
+    address 10.1.65.151/24
+
+auto eth2
+iface eth2 inet manual
+    pre-down ovs-vsctl del-port br-ex eth2
+    pre-down ovs-vsctl del-br br-ex
+    post-up ovs-vsctl add-br br-ex
+    post-up ovs-vsctl add-port br-ex eth2
